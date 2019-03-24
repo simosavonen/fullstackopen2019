@@ -1,0 +1,17 @@
+title 0.6: Uusi muistiinpano (SPA)
+
+note over selain
+Selain suorittaa js-koodia, joka
+estää lomakkeen oletustoiminnan.
+Muistiinpano lisätään selaimen listaan,
+ja niiden renderöinti päivitetään.
+Lopuksi muistiinpano lähetetään palvelimelle.
+end note
+
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+selain-->palvelin: Request Payload [{content: "spa rulez", date: "..."}]
+
+note over palvelin
+palvelin tallentaa muistiinpanon
+end note
+palvelin-->selain: STATUS 201 created
