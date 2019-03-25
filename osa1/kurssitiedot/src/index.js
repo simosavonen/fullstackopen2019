@@ -18,38 +18,40 @@ const Part = (props) => {
 const Content = (props) => {
     return (
         <div>
-            <Part part={props.p1} exercises={props.ex1} />
-            <Part part={props.p2} exercises={props.ex2} />
-            <Part part={props.p3} exercises={props.ex3} />
+            <Part part={props.p1.name} exercises={props.p1.exercises} />
+            <Part part={props.p2.name} exercises={props.p2.exercises} />
+            <Part part={props.p3.name} exercises={props.p3.exercises} />
         </div>
     )
 }
 
 const Total = (props) => {
-    const total = props.ex1 + props.ex2 + props.ex3;
+    const total = props.p1.exercises + props.p2.exercises + props.p3.exercises;
     return (
         <p>yhteensä {total} tehtävää</p>
     )
 }
 
 const App = () => {
-  const course = 'Half Stack -sovelluskehitys'
-  const part1 = 'Reactin perusteet'
-  const exercises1 = 10
-  const part2 = 'Tiedonvälitys propseilla'
-  const exercises2 = 7
-  const part3 = 'Komponenttien tila'
-  const exercises3 = 14
+    const course = 'Half Stack -sovelluskehitys'
+    const part1 = {
+      name: 'Reactin perusteet',
+      exercises: 10
+    }
+    const part2 = {
+      name: 'Tiedonvälitys propseilla',
+      exercises: 7
+    }
+    const part3 = {
+      name: 'Komponenttien tila',
+      exercises: 14
+    }
 
   return (
     <div>
       <Header course={course} />
-      <Content p1={part1} ex1={exercises1} 
-               p2={part2} ex2={exercises2}
-               p3={part3} ex3={exercises3} />
-      <Total ex1={exercises1}
-             ex2={exercises2}
-             ex3={exercises3} />
+      <Content p1={part1} p2={part2} p3={part3} />
+      <Total p1={part1} p2={part2} p3={part3} />
     </div>
   )
 }
