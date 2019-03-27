@@ -12,15 +12,20 @@ const Palautekysely = (props) => {
     )
 }
 
-
-
-const Statistiikka = ({ good, neutral, bad }) => {  
+const Statistiikka = ({ good, neutral, bad }) => {
+    const total = good + neutral + bad
+    const mean = ( good - bad ) / total 
+    const positives = good / total * 100
+    
     return (
         <div>
             <h1>statistiikka</h1>
             <p>hyvä {good}</p>
             <p>neutraali {neutral}</p>
             <p>huono {bad}</p>
+            <p>yhteensä {total}</p>
+            <p>keskiarvo {mean}</p>
+            <p>positiivisia {positives} %</p>
         </div>        
     )
 }
