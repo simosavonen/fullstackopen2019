@@ -19,7 +19,10 @@ const Feedback = (props) => {
 }
 
 const Statistic = ({ text, value }) => (
-    <p>{text} {value}</p>
+    <tr>
+        <td>{text}</td>
+        <td>{value}</td>
+    </tr>
 )
 
 const Statistics = ({ good, neutral, bad }) => {
@@ -31,16 +34,18 @@ const Statistics = ({ good, neutral, bad }) => {
         <div>
             <h1>statistiikka</h1>
             { total > 0 &&
-                <>             
-                <Statistic text="hyvä" value={good} />
-                <Statistic text="neutraali" value={neutral} />
-                <Statistic text="huono" value={bad} />
-                <Statistic text="yhteensä" value={total} />
-                <Statistic text="keskiarvo" value={mean} />
-                <Statistic text="positiivisia" value={positives} />                
-                </>
+                <table>
+                    <tbody>             
+                        <Statistic text="hyvä" value={good} />
+                        <Statistic text="neutraali" value={neutral} />
+                        <Statistic text="huono" value={bad} />
+                        <Statistic text="yhteensä" value={total} />
+                        <Statistic text="keskiarvo" value={mean} />
+                        <Statistic text="positiivisia" value={positives} />                
+                    </tbody>
+                </table>
             }
-            { total == 0 &&
+            { total === 0 &&
                 <p>Ei yhtään palautetta annettu</p>
             }
         </div>        
