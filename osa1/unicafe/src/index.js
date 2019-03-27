@@ -12,7 +12,7 @@ const Palautekysely = (props) => {
     )
 }
 
-const Statistiikka = ({ good, neutral, bad }) => {
+const Statistics = ({ good, neutral, bad }) => {
     const total = good + neutral + bad
     const mean = ( good - bad ) / total 
     const positives = good / total * 100
@@ -45,9 +45,9 @@ const App = () => {
         <Palautekysely handleGood={handleGood}
                        handleNeutral={handleNeutral}
                        handleBad={handleBad} />
-        <Statistiikka good={good} 
-                      neutral={neutral} 
-                      bad={bad} />
+        <Statistics good={good} 
+                    neutral={neutral} 
+                    bad={bad} />
     </div>
   )
 }
