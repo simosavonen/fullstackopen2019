@@ -1,33 +1,43 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Palautekysely = (props) => {       
+const Button = ({ handleClick, text }) => (
+    <button onClick={handleClick}>
+        {text}
+    </button>
+)
+
+const Feedback = (props) => {       
     return (
         <div>
             <h1>anna palautetta</h1>
-            <button onClick={props.handleGood}>hyvä</button>
-            <button onClick={props.handleNeutral}>neutraali</button>
-            <button onClick={props.handleBad}>huono</button>
+            <Button handleClick={props.handleGood} text="hyvä" />
+            <Button handleClick={props.handleNeutral} text="neutraali" />
+            <Button handleClick={props.handleBad} text="huono" />
         </div>
     )
 }
 
+const Statistic = ({ text, value }) => (
+    <p>{text} {value}</p>
+)
+
 const Statistics = ({ good, neutral, bad }) => {
     const total = good + neutral + bad
     const mean = ( good - bad ) / total 
-    const positives = good / total * 100
+    const positives = good / total * 100 + " %"
 
     return (
         <div>
             <h1>statistiikka</h1>
             { total > 0 &&
                 <>             
-                <p>hyvä {good}</p>
-                <p>neutraali {neutral}</p>
-                <p>huono {bad}</p>
-                <p>yhteensä {total}</p>
-                <p>keskiarvo {mean}</p>
-                <p>positiivisia {positives} %</p>
+                <Statistic text="hyvä" value={good} />
+                <Statistic text="neutraali" value={neutral} />
+                <Statistic text="huono" value={bad} />
+                <Statistic text="yhteensä" value={total} />
+                <Statistic text="keskiarvo" value={mean} />
+                <Statistic text="positiivisia" value={positives} />                
                 </>
             }
             { total == 0 &&
@@ -49,9 +59,9 @@ const App = () => {
 
   return (
     <div>
-        <Palautekysely handleGood={handleGood}
-                       handleNeutral={handleNeutral}
-                       handleBad={handleBad} />
+        <Feedback handleGood={handleGood}
+                  handleNeutral={handleNeutral}
+                  handleBad={handleBad} />
         <Statistics good={good} 
                     neutral={neutral} 
                     bad={bad} />
