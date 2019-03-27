@@ -16,16 +16,23 @@ const Statistics = ({ good, neutral, bad }) => {
     const total = good + neutral + bad
     const mean = ( good - bad ) / total 
     const positives = good / total * 100
-    
+
     return (
         <div>
             <h1>statistiikka</h1>
-            <p>hyvä {good}</p>
-            <p>neutraali {neutral}</p>
-            <p>huono {bad}</p>
-            <p>yhteensä {total}</p>
-            <p>keskiarvo {mean}</p>
-            <p>positiivisia {positives} %</p>
+            { total > 0 &&
+                <>             
+                <p>hyvä {good}</p>
+                <p>neutraali {neutral}</p>
+                <p>huono {bad}</p>
+                <p>yhteensä {total}</p>
+                <p>keskiarvo {mean}</p>
+                <p>positiivisia {positives} %</p>
+                </>
+            }
+            { total == 0 &&
+                <p>Ei yhtään palautetta annettu</p>
+            }
         </div>        
     )
 }
