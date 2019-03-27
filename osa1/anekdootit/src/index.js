@@ -1,6 +1,25 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const TopAnecdote = (props) => {
+    const { anecdotes, points } = props
+    let max = 0
+    let index = 0
+    for(let i = 0; i < anecdotes.length; i++) {
+        if(points[i] > max) {
+            max = points[i]
+            index = i
+        }
+    }
+    return (
+        <div>
+            <h1>Anecdote with most votes</h1>
+            <p>{anecdotes[index]}</p>
+            <p>has {points[index]} votes</p>
+        </div>
+    )
+}
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const [points, setPoints] = useState(Array(props.anecdotes.length).fill(0))
@@ -17,10 +36,12 @@ const App = (props) => {
 
   return (
     <div>
-      <p>{props.anecdotes[selected]}</p>
-      <p>has {points[selected]} votes</p>
-      <button onClick={handleVote}>vote</button>
-      <button onClick={handleRandom}>next anecdote</button>
+        <h1>Anecdote of the day</h1>
+        <p>{props.anecdotes[selected]}</p>
+        <p>has {points[selected]} votes</p>
+        <button onClick={handleVote}>vote</button>
+        <button onClick={handleRandom}>next anecdote</button>        
+        <TopAnecdote anecdotes={anecdotes} points={points} />
     </div>
   )
 }
