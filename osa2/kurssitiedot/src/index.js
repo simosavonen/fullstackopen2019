@@ -18,10 +18,21 @@ const Content = props => (
   </div>
 )
 
+const Total = props => {
+    const total = props.parts.reduce((s,p) => {
+        console.log('mitä ihmettä', s, p)
+        return s + p.exercises
+    }, 0)
+
+    return <p>yhteensä {total} tehtävää</p>
+}
+
+
 const Course = props => (
     <div>
         <Header course={props.course.name} />
         <Content parts={props.course.parts} />
+        <Total parts={props.course.parts} />
     </div>
 )
 
