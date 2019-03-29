@@ -1,66 +1,63 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import Course from './components/Course'
 
-const Header = props =>
-  <h1>{props.course}</h1>
-
-const Part = props =>
-  <p>{props.part.name} {props.part.exercises}</p>
-
-const Content = props => (
-  <div>
-      {props.parts.map(part =>  
-        <Part 
-            key={part.id} 
-            part={part} 
-        />
-      )}
-  </div>
-)
-
-const Total = props => {
-    const total = props.parts.reduce((s,p) => {
-        console.log('mitä ihmettä', s, p)
-        return s + p.exercises
-    }, 0)
-
-    return <p>yhteensä {total} tehtävää</p>
-}
-
-
-const Course = props => (
+const Opetusohjelma = props => (
     <div>
-        <Header course={props.course.name} />
-        <Content parts={props.course.parts} />
-        <Total parts={props.course.parts} />
+        <h1>Opetusohjelma</h1>
+        {props.courses.map(course =>
+            <Course 
+                key={course.id}
+                course={course}
+            />  
+        )}
     </div>
 )
 
 const App = () => {
-    const course = {
-        name: 'Half Stack -sovelluskehitys',
-        parts: [
+    const courses = [
+        {
+          name: 'Half Stack -sovelluskehitys',
+          id: 1,
+          parts: [
             {
-            name: 'Reactin perusteet',
-            exercises: 10,
-            id: 1
+              name: 'Reactin perusteet',
+              exercises: 10,
+              id: 1
             },
             {
-            name: 'Tiedonvälitys propseilla',
-            exercises: 7,
-            id: 2
+              name: 'Tiedonvälitys propseilla',
+              exercises: 7,
+              id: 2
             },
             {
-            name: 'Komponenttien tila',
-            exercises: 14,
-            id: 3
+              name: 'Komponenttien tila',
+              exercises: 14,
+              id: 3
             }
-        ]
-    }
+          ]
+        },
+        {
+          name: 'Node.js',
+          id: 2,
+          parts: [
+            {
+              name: 'Routing',
+              exercises: 3,
+              id: 1
+            },
+            {
+              name: 'Middlewaret',
+              exercises: 7,
+              id: 2
+            }
+          ]
+        }
+    ]
 
   return (
     <div>
-        <Course course={course} />
+        <Opetusohjelma courses={courses} />
     </div>
   )
 }
