@@ -19,9 +19,12 @@ const App = () => {
     const personObject = {
       name: newName,
     }
-
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    const names = persons.map(person => person.name)
+    if(!names.includes(newName)) {
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
+    else alert(`${newName} on jo luettelossa`)
   }
 
   const handleNameChange = (event) => {
