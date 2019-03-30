@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import Person from './components/Person'
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
+import Filter from './components/Filter'
 
 const App = () => {
   const [ persons, setPersons] = useState([
@@ -13,15 +15,8 @@ const App = () => {
   const [ nameFilter, setNameFilter ] = useState('')
 
   const personsToShow = !nameFilter
-    ? persons
-    : persons.filter(person => person.name.toLowerCase().includes(nameFilter))
-
-  const rows = () => personsToShow.map(person =>
-    <Person 
-      key={person.name}
-      person={person}
-    />  
-  )
+  ? persons
+  : persons.filter(person => person.name.toLowerCase().includes(nameFilter))
 
   const addNumber = (event) => {
     event.preventDefault()
@@ -53,40 +48,17 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-      <div>
-        rajaa näytettäviä 
-        <input 
-          value={nameFilter}
-          onChange={handleNameFilterChange}
-        />
-      </div>
+      <Filter filter={nameFilter} handler={handleNameFilterChange} />
       <h3>lisää uusi</h3>
-      <form onSubmit={addNumber}>
-        <div>
-          nimi: 
-          <input 
-            value={newName}
-            onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          numero:
-          <input 
-            value={newNumber}
-            onChange={handleNumberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">lisää</button>
-        </div>
-      </form>
-     
-      <h2>Numerot</h2>
-      <table>
-        <tbody>
-          {rows()}
-        </tbody>
-      </table>
+      <PersonForm 
+        formAction={addNumber}
+        nameState={newName}
+        numberState={newNumber}
+        nameHandler={handleNameChange}
+        numberHandler={handleNumberChange}
+      />     
+      <h3>Numerot</h3>
+      <Persons persons={personsToShow} />
     </div>
   )
 
