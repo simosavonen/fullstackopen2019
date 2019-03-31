@@ -29,9 +29,13 @@ const App = () => {
     }
     const names = persons.map(person => person.name)
     if(!names.includes(newName)) {
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      axios
+        .post('http://localhost:3001/persons', personObject)
+        .then(respoinse => {
+          setPersons(persons.concat(personObject))
+          setNewName('')
+          setNewNumber('')
+        })
     }
     else alert(`${newName} on jo luettelossa`)
   }
