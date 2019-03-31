@@ -28,8 +28,8 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-    const names = persons.map(person => person.name)
-    if(!names.includes(newName)) {
+    const personSingle = persons.filter(p => p.name === newName) 
+    if(personSingle.length === 0) {
       personService
         .create(personObject)
         .then(response => {
@@ -38,7 +38,19 @@ const App = () => {
           setNewNumber('')
         })
     }
-    else alert(`${newName} on jo luettelossa`)
+    else {
+      const message = `${newName} on jo luettelossa, korvataanko vanha numero uudella?`
+      if(window.confirm(message)) {
+        const id = personSingle[0].id
+        personService
+          .update(id, personObject)
+          .then(response => {
+            setPersons(persons.map(p => p.id !== id ? p : response.data))
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    }
   }
 
   const handleDeletion = person => {    
