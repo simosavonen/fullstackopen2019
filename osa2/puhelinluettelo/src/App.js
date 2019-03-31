@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personService from './services/persons'
 
 const App = () => {
@@ -9,6 +10,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ nameFilter, setNameFilter ] = useState('')
+  const [ message, setMessage ] = useState(null)
+  const [ isError, setIsError ] = useState(false)
 
   useEffect(() => {
     personService
@@ -36,6 +39,9 @@ const App = () => {
           setPersons(persons.concat(response.data))
           setNewName('')
           setNewNumber('')
+          setMessage(`Lisättiin ${response.data.name}.`)
+          setIsError(false)
+          setTimeout(() => { setMessage(null) }, 5000)
         })
     }
     else {
@@ -49,10 +55,19 @@ const App = () => {
             setNewName('')
             setNewNumber('')
           })
+          .catch(error => {
+            setMessage(`${newName} oli jo poistettu palvelimelta.`)
+            setIsError(true)
+            setTimeout(() => { setMessage(null) }, 5000)
+
+            // ehkä pitäisi hakea palvelimelta uusi päivitetty tilanne
+            // setPersons(persons.filter(p => p.id !== id))
+          })
       }
     }
   }
 
+  
   const handleDeletion = person => {    
     if(window.confirm(`Poistetaanko ${person.name}?`)) {
       const personDeleted = persons.filter(p => p.id !== person.id)
@@ -60,9 +75,17 @@ const App = () => {
         .remove(person.id)
         .then(() => {
           setPersons(personDeleted)
+          setMessage(`Poistettiin ${person.name}.`)
+          setIsError(false)
+          setTimeout(() => { setMessage(null) }, 5000)
         })
         .catch(error => {
-          console.log('fail', error)
+          setMessage(`${person.name} oli jo poistettu palvelimelta.`)
+          setIsError(true)
+          setTimeout(() => { setMessage(null) }, 5000)
+
+          // ehkä pitäisi hakea palvelimelta uusi päivitetty tilanne
+          // setPersons(personDeleted)
         })
     }
   }
@@ -82,6 +105,9 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      
+      <Notification message={message} isError={isError} />
+
       <Filter filter={nameFilter} handler={handleNameFilterChange} />
       <h3>lisää uusi</h3>
       <PersonForm 
