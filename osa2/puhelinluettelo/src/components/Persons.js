@@ -1,10 +1,13 @@
 import React from 'react'
 
-const Person = ({ person }) => {
+const Person = ({ person, deleteHandler }) => {
     return (
         <tr>
             <td>{person.name}</td>
             <td>{person.number}</td>
+            <td>
+                <button onClick={() => deleteHandler(person)}>poista</button>
+            </td>
         </tr>
     )
 }
@@ -15,6 +18,7 @@ const Persons = (props) => {
         <Person 
         key={person.name}
         person={person}
+        deleteHandler={props.deleteHandler}
         />  
     )
 

@@ -41,6 +41,20 @@ const App = () => {
     else alert(`${newName} on jo luettelossa`)
   }
 
+  const handleDeletion = person => {    
+    if(window.confirm(`Poistetaanko ${person.name}?`)) {
+      const personDeleted = persons.filter(p => p.id !== person.id)
+      personService
+        .remove(person.id)
+        .then(() => {
+          setPersons(personDeleted)
+        })
+        .catch(error => {
+          console.log('fail', error)
+        })
+    }
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -66,7 +80,7 @@ const App = () => {
         numberHandler={handleNumberChange}
       />     
       <h3>Numerot</h3>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} deleteHandler={handleDeletion} />
     </div>
   )
 
