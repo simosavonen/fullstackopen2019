@@ -3,11 +3,7 @@ module.exports = {
         "es6": true,
         "node": true
     },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
+    "extends": "airbnb",
     "parserOptions": {
         "ecmaVersion": 2018,
         "sourceType": "module"
@@ -30,6 +26,10 @@ module.exports = {
             "never"
         ],
         "eqeqeq": "error",
-        "no-console": 0
+        "no-console": 0,
+        "no-underscore-dangle": 0,
+        "no-param-reassign": 0,
+        "global-require": 0,
+        "prefer-destructuring": 0
     }
 };
