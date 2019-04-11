@@ -1,7 +1,8 @@
 module.exports = {
     "env": {
         "es6": true,
-        "node": true
+        "node": true,
+        "jest": true
     },
     "extends": "airbnb",
     "parserOptions": {
@@ -30,6 +31,7 @@ module.exports = {
         "no-underscore-dangle": 0,
         "no-param-reassign": 0,
         "global-require": 0,
-        "prefer-destructuring": 0
+        "prefer-destructuring": 0,
+        "import/order": 0
     }
 };

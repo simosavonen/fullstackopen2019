@@ -10,3 +10,6 @@ Write down the commands used to create the app
 7. `eslint --init`
 8. `npm install cors --save`
 9. `npx install-peerdeps --dev eslint-config-airbnb`
+
+Testing
+1. `npm install jest --save-dev`
