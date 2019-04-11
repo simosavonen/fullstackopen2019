@@ -32,6 +32,8 @@ module.exports = {
         "no-param-reassign": 0,
         "global-require": 0,
         "prefer-destructuring": 0,
-        "import/order": 0
+        "import/order": 0,
+        "consistent-return": 0,
+        "no-unused-vars": 0
     }
 };

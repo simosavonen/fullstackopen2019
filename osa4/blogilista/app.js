@@ -9,12 +9,12 @@ const middleware = require('./utils/middleware')
 const app = express()
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
-    .then(() => {
-        console.log('connected to MongoDB')
-    })
-    .catch((error) => {
-        console.log('error connection to MongoDB:', error.message)
-    })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
 
 
 app.use(bodyParser.json())

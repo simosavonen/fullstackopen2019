@@ -13,3 +13,4 @@ Write down the commands used to create the app
 
 Testing
 1. `npm install jest --save-dev`
+2. `npm install lodash --save-dev`
