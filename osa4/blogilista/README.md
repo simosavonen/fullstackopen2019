@@ -9,5 +9,6 @@ Write down the commands used to create the app
 6. `npm install eslint --save-dev`
 7. `eslint --init`
 8. `npm install cors --save`
+
 eslint ei alkanut toimia, joten
 9. `npx install-peerdeps --dev eslint-config-airbnb`
