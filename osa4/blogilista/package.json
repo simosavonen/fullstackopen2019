@@ -4,11 +4,11 @@
   "description": "blogilista listaa blogeja",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "watch": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
     "lint": "eslint .",
-    "lintfix": "eslint . --fix",
-    "test": "jest --verbose"
+    "lintfix": "eslint . --fix"
   },
   "author": "Simo Savonen",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "mongoose": "^5.4.23"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.3.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -28,7 +29,8 @@
     "eslint-plugin-jsx-a11y": "^6.1.1",
     "eslint-plugin-react": "^7.11.0",
     "jest": "^24.7.1",
-    "nodemon": "^1.18.10"
+    "nodemon": "^1.18.10",
+    "supertest": "^4.0.2"
   },
   "jest": {
     "testEnvironment": "node"
