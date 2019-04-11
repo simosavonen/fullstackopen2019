@@ -20,7 +20,8 @@ const initialBlogs = [
   }
 ]
 
-beforeEach(async () => {
+// beforeEach toimi myös, mutta nyt MongoDB Atlakseen jää jälkiä
+beforeAll(async () => {
   await Blog.deleteMany({})
 
   let blogObject = new Blog(initialBlogs[0])
