@@ -20,3 +20,4 @@ Testing
 Users and auth
 1. `npm install bcrypt --save`
 2. `npm install moogoose-unique-validator --save`
+3. `npm install jsonwebtoken --save`

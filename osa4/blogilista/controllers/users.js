@@ -18,8 +18,10 @@ usersRouter.post('/', async (request, response, next) => {
     if (body.password === undefined || body.password.length < 3) valid = false
 
     if (!valid) {
-      response.status(406)
-      next(new Error('username and password needs to be at least 3 chars long'))
+      response.status(406).json({
+        error: "username and password need to be at least 3 chars long"
+      })
+
     }
 
     const saltRounds = 10
