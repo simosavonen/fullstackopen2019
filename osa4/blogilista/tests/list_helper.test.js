@@ -49,5 +49,3 @@ describe('most blogs', () => {
     expect(result).toEqual(expected)
   })
 })
-
-
