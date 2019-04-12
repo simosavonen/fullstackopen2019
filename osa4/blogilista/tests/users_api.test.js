@@ -56,7 +56,7 @@ describe('when there is initially one user at db', () => {
     expect(usersAtEnd.length).toBe(usersAtStart.length)
   })
 
-  test('creating fails if username or password is too short', async () => {
+  test('creation fails if username or password is too short', async () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {

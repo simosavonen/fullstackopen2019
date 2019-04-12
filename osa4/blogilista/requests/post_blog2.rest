@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Nolifer for life",
+    "author": "Mordian Gaol",
+    "url": "http://www.blogs.com/nolife",
+    "likes": 2
+}
