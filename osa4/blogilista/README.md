@@ -16,3 +16,7 @@ Testing
 2. `npm install lodash --save`
 3. `npm install --save-dev cross-env`
 4. `npm install --save-dev supertest`
+
+Users and auth
+1. `npm install bcrypt --save`
+2. `npm install moogoose-unique-validator --save`
