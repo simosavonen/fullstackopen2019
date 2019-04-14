@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -12,6 +13,8 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [isError, setIsError] = useState(false)
+
+  const blogFormRef = React.createRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -68,7 +71,9 @@ const App = () => {
           <button type='submit'>logout</button>
         </form>
 
-        <BlogForm handleBlogCreation={handleBlogCreation} />
+        <Togglable buttonLabel='new blog' ref={blogFormRef}>
+          <BlogForm handleBlogCreation={handleBlogCreation} />
+        </Togglable>
 
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
@@ -78,6 +83,9 @@ const App = () => {
   }
 
   const handleBlogCreation = async (title, author, url) => {
+
+    blogFormRef.current.toggleVisibility()
+
     const blogObject = {
       title: title,
       author: author,
@@ -130,7 +138,7 @@ const App = () => {
     setIsError(error)
     setTimeout(() => {
       setMessage(null)
-    }, 5000)
+    }, 10000)
   }
 
   return (
