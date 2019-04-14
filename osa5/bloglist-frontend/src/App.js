@@ -142,6 +142,9 @@ const App = () => {
     }
     try {
       const response = await blogService.create(blogObject)
+      // bug: response ei sisällä tietoa user.username tai user.name
+      // fix: lataa sivu uudestaan, niin backend antaa blogit oikein
+      // muotoiltuina... tai sitten refactor backend.
       const newBlogs = blogs.concat(response)
       setBlogs(newBlogs)
       showMessage(`a new blog, ${title} by ${author}, was added`, false)

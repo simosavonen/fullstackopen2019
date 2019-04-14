@@ -30,6 +30,8 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
       </div>
     )
   }
+  // user.id doesn't exist for some reason?
+  // user only contains the token, username and name
   return (
     <div style={blogStyle} onClick={() => setMinimized(!minimized)}>
       {blog.title} {blog.author} <br />
