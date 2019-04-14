@@ -76,10 +76,27 @@ const App = () => {
         </Togglable>
 
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handleLike={handleLike}
+            user={user}
+            handleRemove={handleRemove}
+          />
         )}
       </div>
     )
+  }
+
+  const handleRemove = async (blog) => {
+    try {
+      await blogService.remove(blog)
+      // lets assume it got deleted OK
+      const blogsMinusOne = blogs.filter(b => b.id !== blog.id)
+      setBlogs(blogsMinusOne) // no need to sort
+    } catch (exception) {
+      console.log(exception)
+    }
   }
 
   const handleLike = async (blog) => {
@@ -105,9 +122,7 @@ const App = () => {
           return b
         }
       })
-
       setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
-
 
       // this kept pushing the content downwards after click, annoying
       // showMessage('your like was registered', false)
@@ -161,7 +176,7 @@ const App = () => {
     try {
       window.localStorage.removeItem('loggedBlogsUser')
       setUser(null)
-      blogService.setToken(null) // ehkä turha
+      blogService.setToken(null) // is this needed?
     } catch (exception) {
       console.log(exception)
     }
