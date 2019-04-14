@@ -18,7 +18,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     )
   }, [])
 
@@ -105,7 +105,12 @@ const App = () => {
           return b
         }
       })
-      setBlogs(updatedBlogs) // problematic, kept erasing user.name
+
+      setBlogs(updatedBlogs.sort((a, b) => b.likes - a.likes))
+
+
+      // this kept pushing the content downwards after click, annoying
+      // showMessage('your like was registered', false)
     } catch (exception) {
       console.log(exception)
     }
@@ -167,7 +172,7 @@ const App = () => {
     setIsError(error)
     setTimeout(() => {
       setMessage(null)
-    }, 10000)
+    }, 5000)
   }
 
   return (
