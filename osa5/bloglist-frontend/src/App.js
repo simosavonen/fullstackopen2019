@@ -76,10 +76,39 @@ const App = () => {
         </Togglable>
 
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} />
         )}
       </div>
     )
+  }
+
+  const handleLike = async (blog) => {
+    // ended up cloning the whole blog object
+    const likedBlog = {
+      id: blog.id,
+      user: {
+        id: blog.user.id,
+        username: blog.user.username,
+        name: blog.user.name
+      },
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    }
+    try {
+      await blogService.update(likedBlog)
+      const updatedBlogs = blogs.map(b => {
+        if (b.id === likedBlog.id) {
+          return likedBlog // is likedBlog the best option here?
+        } else {
+          return b
+        }
+      })
+      setBlogs(updatedBlogs) // problematic, kept erasing user.name
+    } catch (exception) {
+      console.log(exception)
+    }
   }
 
   const handleBlogCreation = async (title, author, url) => {

@@ -7,8 +7,14 @@ const blogStyle = {
   marginBottom: 5,
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
   const [minimized, setMinimized] = useState(true)
+
+  const handleClick = (event) => {
+    event.stopPropagation() // clicking the button should not minimize the div
+    handleLike(blog)
+  }
+
   if (minimized) {
     return (
       <div style={blogStyle} onClick={() => setMinimized(!minimized)}>
@@ -20,7 +26,7 @@ const Blog = ({ blog }) => {
     <div style={blogStyle} onClick={() => setMinimized(!minimized)}>
       {blog.title} {blog.author} <br />
       <a href={blog.url}>{blog.url}</a> <br />
-      {blog.likes} likes <button onClick={(event) => event.stopPropagation()}>like</button><br />
+      {blog.likes} likes <button onClick={(event) => handleClick(event)}>like</button><br />
       added by {blog.user.name}
     </div>
   )
