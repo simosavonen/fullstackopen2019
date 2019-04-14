@@ -1,38 +1,24 @@
 import React, { useState } from 'react'
 
-const BlogForm = ({ blogService, blogs, setBlogs }) => {
+const BlogForm = ({ handleBlogCreation }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleBlogCreation = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
 
-    try {
-      const blogObject = {
-        title: title,
-        author: author,
-        url: url,
-      }
-      const response = await blogService.create(blogObject)
-      // skip checks if blog was actually added
-      const newBlogs = blogs.concat(response)
-      setBlogs(newBlogs)
+    await handleBlogCreation(title, author, url)
 
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-
-    } catch (exception) {
-      console.log(exception)
-    }
-
+    setTitle('')
+    setAuthor('')
+    setUrl('')
   }
 
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={handleBlogCreation}>
+      <form onSubmit={handleSubmit}>
         <div>
           title:
           <input

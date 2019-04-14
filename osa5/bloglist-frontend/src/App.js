@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -9,6 +10,8 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -29,6 +32,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
+        <Notification message={message} isError={isError} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -58,22 +62,36 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
+        <Notification message={message} isError={isError} />
         <p>{user.name} logged in</p>
         <form onSubmit={handleLogout}>
           <button type='submit'>logout</button>
         </form>
 
-        <BlogForm
-          blogService={blogService}
-          blogs={blogs}
-          setBlogs={setBlogs}
-        />
+        <BlogForm handleBlogCreation={handleBlogCreation} />
 
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
       </div>
     )
+  }
+
+  const handleBlogCreation = async (title, author, url) => {
+    const blogObject = {
+      title: title,
+      author: author,
+      url: url,
+    }
+    try {
+      const response = await blogService.create(blogObject)
+      const newBlogs = blogs.concat(response)
+      setBlogs(newBlogs)
+      showMessage(`a new blog, ${title} by ${author}, was added`, false)
+    } catch (exception) {
+      showMessage('failed to create a blog, check your form fields', true)
+    }
+
   }
 
   const handleLogin = async (event) => {
@@ -92,7 +110,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      console.log(exception)
+      showMessage('wrong username or password', true)
     }
   }
 
@@ -105,6 +123,14 @@ const App = () => {
     } catch (exception) {
       console.log(exception)
     }
+  }
+
+  const showMessage = (text, error) => {
+    setMessage(text)
+    setIsError(error)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
 
   return (
