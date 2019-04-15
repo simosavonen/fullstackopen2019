@@ -25,7 +25,7 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
 
   if (minimized) {
     return (
-      <div style={blogStyle} onClick={() => setMinimized(!minimized)}>
+      <div style={blogStyle} className="minimizable" onClick={() => setMinimized(!minimized)}>
         {blog.title} {blog.author}
       </div>
     )
@@ -33,7 +33,7 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
   // user.id doesn't exist for some reason?
   // user only contains the token, username and name
   return (
-    <div style={blogStyle} onClick={() => setMinimized(!minimized)}>
+    <div style={blogStyle} className="minimizable" onClick={() => setMinimized(!minimized)}>
       {blog.title} {blog.author} <br />
       <a href={blog.url}>{blog.url}</a> <br />
       {blog.likes} likes <button onClick={(event) => handleClick(event)}>like</button><br />
