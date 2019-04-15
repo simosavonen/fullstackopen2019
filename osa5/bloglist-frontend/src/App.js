@@ -5,11 +5,12 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useField } from './hooks'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const username = useField('text')
+  const password = useField('password')
   const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [isError, setIsError] = useState(false)
@@ -39,21 +40,11 @@ const App = () => {
         <form onSubmit={handleLogin}>
           <div>
             username
-            <input
-              type='text'
-              value={username}
-              name='Username'
-              onChange={({ target }) => setUsername(target.value)}
-            />
+            <input {...username.inputProps} />
           </div>
           <div>
             password
-            <input
-              type='password'
-              value={password}
-              name='Password'
-              onChange={({ target }) => setPassword(target.value)}
-            />
+            <input {...password.inputProps} />
           </div>
           <button type='submit'>login</button>
         </form>
@@ -157,9 +148,12 @@ const App = () => {
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
-      const user = await loginService.login({
-        username, password
-      })
+      // took hours to figure this out, the exact form of credentials to pass
+      const credentials = {
+        username: username.value,
+        password: password.value
+      }
+      const user = await loginService.login(credentials)
 
       window.localStorage.setItem(
         'loggedBlogsUser', JSON.stringify(user)
@@ -167,8 +161,11 @@ const App = () => {
 
       blogService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
+
+      // the login form gets hidden, so do we need to empty the fields?
+      // username.reset 
+      // password.reset
+
     } catch (exception) {
       showMessage('wrong username or password', true)
     }
