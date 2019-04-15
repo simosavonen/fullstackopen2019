@@ -38,6 +38,7 @@ describe('<Blog />', () => {
 
   it('at start the blog details are not displayed', () => {
     const div = component.container.querySelector('.minimizable')
+    expect(div).toHaveTextContent('the title author name')
     expect(div).not.toHaveTextContent('www.theurl.com')
     expect(div).not.toHaveTextContent('100 likes')
     expect(div).not.toHaveTextContent('added by Mister Blogger')
