@@ -16,12 +16,12 @@ const App = (props) => {
     event.target.anecdote.value = ''
   }
 
-
+  const byVotes = (a1, a2) => a2.votes - a1.votes
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {anecdotes.sort(byVotes).map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
