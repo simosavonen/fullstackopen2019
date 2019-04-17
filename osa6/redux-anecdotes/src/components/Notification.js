@@ -16,7 +16,6 @@ const Notification = (props) => {
   )
 }
 
-
 const mapStateToProps = (state) => {
   return {
     notification: state.notification

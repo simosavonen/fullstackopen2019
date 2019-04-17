@@ -17,16 +17,12 @@ const Filter = (props) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return { state }
-}
-
 const mapDispatchToProps = {
   filterChange,
 }
 
 const ConnectedFilter = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Filter)
 
