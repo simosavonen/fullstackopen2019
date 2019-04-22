@@ -25,7 +25,7 @@ router.post('/', async (request, response) => {
 
   const user = await User.findById(decodedToken.id)
 
-  blog.user = user.id
+  blog.user = user // fixed a bug? was: blog.user = user.id
 
   if (!blog.url || !blog.title) {
     return response.status(400).send({ error: 'title or url missing' }).end()
