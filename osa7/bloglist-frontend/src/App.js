@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
 import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -6,14 +7,14 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { useField } from './hooks'
+import { setNotification } from './reducers/notificationReducer'
 
-const App = () => {
+
+const App = (props) => {
   const [blogs, setBlogs] = useState([])
   const username = useField('text')
   const password = useField('password')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState(null)
-  const [isError, setIsError] = useState(false)
 
   const blogFormRef = React.createRef()
 
@@ -36,7 +37,7 @@ const App = () => {
     return (
       <div>
         <h2>log in to application</h2>
-        <Notification message={message} isError={isError} />
+        <Notification />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -60,7 +61,7 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-        <Notification message={message} isError={isError} />
+        <Notification />
         <p>{user.name} logged in</p>
         <form onSubmit={handleLogout}>
           <button type='submit'>logout</button>
@@ -142,9 +143,9 @@ const App = () => {
       // or we could refactor the backend
       const newBlogs = blogs.concat(response)
       setBlogs(newBlogs)
-      showMessage(`a new blog, ${title} by ${author}, was added`, false)
+      props.setNotification(`a new blog, ${title} by ${author}, was added`)
     } catch (exception) {
-      showMessage('failed to create a blog, check your form fields', true)
+      props.setNotification('failed to create a blog, check your form fields', true)
     }
 
   }
@@ -166,7 +167,7 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
     } catch (exception) {
-      showMessage('wrong username or password', true)
+      props.setNotification('wrong username or password', true)
     }
   }
 
@@ -181,14 +182,6 @@ const App = () => {
     }
   }
 
-  const showMessage = (text, error) => {
-    setMessage(text)
-    setIsError(error)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-  }
-
   return (
     <div>
       {user === null ?
@@ -199,4 +192,6 @@ const App = () => {
   )
 }
 
-export default App
+export default connect(
+  null, { setNotification }
+)(App)

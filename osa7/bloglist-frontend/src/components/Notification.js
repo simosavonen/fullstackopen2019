@@ -1,23 +1,25 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import './Notification.css'
 
 
-const Notification = ({ message, isError }) => {
+const Notification = ({ notification }) => {
 
-  if (message) {
+  if (notification.text) {
     return (
-      <div className={isError ? 'notification error' : 'notification'}>
-        {message}
+      <div className={notification.isError ? 'notification error' : 'notification'}>
+        {notification.text}
       </div>
     )
   }
   return null
 }
 
-Notification.propTypes = {
-  message: PropTypes.string,
-  isError: PropTypes.bool.isRequired
+const mapStateToProps = (state) => {
+  return {
+    notification: state.notification
+  }
 }
 
-export default Notification
+const ConnectedNotification = connect(mapStateToProps)(Notification)
+export default ConnectedNotification
