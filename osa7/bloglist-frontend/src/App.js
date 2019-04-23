@@ -5,11 +5,16 @@ import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
 import { setUser } from './reducers/loginReducer'
+import {
+  BrowserRouter as Router,
+  Route, Link
+} from 'react-router-dom'
 
 
 const App = (props) => {
@@ -17,6 +22,7 @@ const App = (props) => {
 
   useEffect(() => {
     blogService.getAll().then(blogs => props.initializeBlogs(blogs))
+      .catch(err => console.log(err))
   }, [])
 
   useEffect(() => {
@@ -41,11 +47,6 @@ const App = (props) => {
     <div>
       <h2>blogs</h2>
       <Notification />
-      <p>{props.user.name} logged in</p>
-      <form onSubmit={handleLogout}>
-        <button type='submit'>logout</button>
-      </form>
-
       <Togglable buttonLabel='new blog' ref={newBlogRef}>
         <NewBlog ref={newBlogRef} />
       </Togglable>
@@ -111,13 +112,32 @@ const App = (props) => {
     }
   }
 
+  const navLink = { padding: 5 }
+  const logoutForm = {
+    display: 'inline-block',
+    marginLeft: 10
+  }
+
+  const BlogList = () => (
+    props.user === null ? loginForm() : blogList()
+  )
+
   return (
-    <div>
-      {props.user === null ?
-        loginForm() :
-        blogList()
-      }
-    </div>
+    <Router>
+      <div>
+        <div>
+          <Link style={navLink} to='/'>blogs</Link>
+          <Link style={navLink} to='/users'>users</Link>
+          {props.user &&
+            <form style={logoutForm} onSubmit={handleLogout}>
+              {props.user.name} logged in <button type='submit'>logout</button>
+            </form>
+          }
+        </div>
+        <Route exact path='/' render={() => <BlogList />} />
+        <Route path='/users' render={() => <Users />} />
+      </div>
+    </Router>
   )
 }
 
