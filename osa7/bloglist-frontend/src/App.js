@@ -6,6 +6,7 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import UserDetails from './components/UserDetails'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
@@ -135,7 +136,9 @@ const App = (props) => {
           }
         </div>
         <Route exact path='/' render={() => <BlogList />} />
-        <Route path='/users' render={() => <Users />} />
+        <Route exact path='/users' render={() => <Users />} />
+        <Route path='/users/:id' render={({ match }) =>
+          <UserDetails id={match.params.id} />} />
       </div>
     </Router>
   )

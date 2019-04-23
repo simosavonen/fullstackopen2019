@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import userService from '../services/users'
 import { initializeUsers } from '../reducers/userReducer'
+import { Link } from 'react-router-dom'
 
 const Users = (props) => {
 
@@ -12,7 +13,7 @@ const Users = (props) => {
 
   const rows = () => props.allUsers.map(user =>
     <tr key={user.username}>
-      <td>{user.name}</td>
+      <td><Link to={`/users/${user.id}`}>{user.name}</Link></td>
       <td>{user.blogs.length}</td>
     </tr>
   )
