@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Blogs from './components/Blogs'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import { useField } from './hooks'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
+import { setUser } from './reducers/loginReducer'
 
 
 const App = (props) => {
-  const username = useField('text')
-  const password = useField('password')
-  const [user, setUser] = useState(null)
-
   const newBlogRef = React.createRef()
 
   useEffect(() => {
@@ -26,7 +23,7 @@ const App = (props) => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogsUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      props.setUser(user)
       blogService.setToken(user.token)
     }
   }, [])
@@ -35,17 +32,7 @@ const App = (props) => {
     <div>
       <h2>log in to application</h2>
       <Notification />
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input {...username.inputProps} />
-        </div>
-        <div>
-          password
-          <input {...password.inputProps} />
-        </div>
-        <button type='submit'>login</button>
-      </form>
+      <LoginForm handleLogin={handleLogin} />
     </div>
   )
 
@@ -54,7 +41,7 @@ const App = (props) => {
     <div>
       <h2>blogs</h2>
       <Notification />
-      <p>{user.name} logged in</p>
+      <p>{props.user.name} logged in</p>
       <form onSubmit={handleLogout}>
         <button type='submit'>logout</button>
       </form>
@@ -64,7 +51,7 @@ const App = (props) => {
       </Togglable>
 
       <Blogs
-        user={user}
+        user={props.user}
         handleLike={handleLike}
         handleRemove={handleRemove}
       />
@@ -94,13 +81,11 @@ const App = (props) => {
     }
   }
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (username, password) => {
     try {
-      // took hours to figure this out, the exact form of credentials to pass
       const credentials = {
-        username: username.value,
-        password: password.value
+        username,
+        password
       }
       const user = await loginService.login(credentials)
 
@@ -109,7 +94,7 @@ const App = (props) => {
       )
 
       blogService.setToken(user.token)
-      setUser(user)
+      props.setUser(user)
     } catch (exception) {
       props.setNotification('wrong username or password', true)
     }
@@ -119,7 +104,7 @@ const App = (props) => {
     event.preventDefault()
     try {
       window.localStorage.removeItem('loggedBlogsUser')
-      setUser(null)
+      props.setUser(null)
       blogService.setToken(null) // is this needed?
     } catch (exception) {
       console.log(exception)
@@ -128,7 +113,7 @@ const App = (props) => {
 
   return (
     <div>
-      {user === null ?
+      {props.user === null ?
         loginForm() :
         blogList()
       }
@@ -136,12 +121,19 @@ const App = (props) => {
   )
 }
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  }
+}
+
 export default connect(
-  null,
+  mapStateToProps,
   {
     initializeBlogs,
     setNotification,
     likeBlog,
-    removeBlog
+    removeBlog,
+    setUser
   }
 )(App)
