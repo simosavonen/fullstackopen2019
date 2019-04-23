@@ -30,14 +30,13 @@ const Blog = ({ blog, user, handleLike, handleRemove }) => {
       </div>
     )
   }
-  // user.id doesn't exist? Only seeing user.token, user.username, user.name
   return (
     <div style={blogStyle} className="minimizable" onClick={() => setMinimized(!minimized)}>
       {blog.title} {blog.author} <br />
       <a href={blog.url}>{blog.url}</a> <br />
       {blog.likes} likes <button onClick={(event) => handleClick(event)}>like</button><br />
       added by {blog.user.name}<br />
-      {blog.user.username === user.username &&
+      {blog.user.id === user.id &&
         <button onClick={(event) => confirmRemove(event)}>remove</button>
       }
     </div>
