@@ -1,24 +1,42 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { createBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/notificationReducer'
+import blogService from '../services/blogs'
 
-const BlogForm = ({ handleBlogCreation }) => {
+const NewBlog = React.forwardRef((props, ref) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const handleSubmit = async (event) => {
+  const addBlog = async (event) => {
     event.preventDefault()
+    const blogObject = {
+      title,
+      author,
+      url
+    }
+    try {
+      const newBlog = await blogService.create(blogObject)
+      props.createBlog(newBlog)
 
-    await handleBlogCreation(title, author, url)
+      props.setNotification(`a new blog, ${title} by ${author}, was added`)
 
-    setTitle('')
-    setAuthor('')
-    setUrl('')
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+
+      ref.current.toggleVisibility()
+
+    } catch (exception) {
+      props.setNotification('failed to create a blog, check your form fields', true)
+    }
   }
 
   return (
     <div>
       <h2>create new</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={addBlog}>
         <div>
           title:
           <input
@@ -33,7 +51,7 @@ const BlogForm = ({ handleBlogCreation }) => {
           <input
             type='text'
             value={author}
-            name='Aitle'
+            name='Author'
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -50,6 +68,11 @@ const BlogForm = ({ handleBlogCreation }) => {
       </form>
     </div>
   )
-}
+})
 
-export default BlogForm
+export default connect(
+  null,
+  { createBlog, setNotification },
+  null,
+  { forwardRef: true }
+)(NewBlog)

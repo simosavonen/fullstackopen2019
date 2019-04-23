@@ -7,7 +7,7 @@ const blogStyle = {
   marginBottom: 5,
 }
 
-const Blog = ({ blog, handleLike, user, handleRemove }) => {
+const Blog = ({ blog, user, handleLike, handleRemove }) => {
   const [minimized, setMinimized] = useState(true)
 
   const handleClick = (event) => {
@@ -30,8 +30,7 @@ const Blog = ({ blog, handleLike, user, handleRemove }) => {
       </div>
     )
   }
-  // user.id doesn't exist for some reason?
-  // user only contains the token, username and name
+  // user.id doesn't exist? Only seeing user.token, user.username, user.name
   return (
     <div style={blogStyle} className="minimizable" onClick={() => setMinimized(!minimized)}>
       {blog.title} {blog.author} <br />
