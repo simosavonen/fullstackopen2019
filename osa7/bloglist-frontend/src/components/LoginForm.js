@@ -1,5 +1,7 @@
 import React from 'react'
 import { useField } from '../hooks'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button';
 
 const Login = ({ handleLogin }) => {
   const username = useField('text')
@@ -12,15 +14,22 @@ const Login = ({ handleLogin }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        username
-          <input {...username.inputProps} />
-      </div>
-      <div>
-        password
-          <input {...password.inputProps} />
-      </div>
-      <button type='submit'>login</button>
+      <TextField
+        {...username.inputProps}
+        label="username"
+        margin="normal"
+        variant="outlined"
+      />
+      <TextField
+        {...password.inputProps}
+        label="Password"
+        margin="normal"
+        variant="outlined"
+      />
+      <br />
+      <Button variant="contained" type="submit">
+        login
+      </Button>
     </form>
   )
 }

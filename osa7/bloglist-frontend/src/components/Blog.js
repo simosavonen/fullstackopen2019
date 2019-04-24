@@ -1,19 +1,24 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
-const blogStyle = {
-  padding: 10,
-  border: 'solid',
-  borderWidth: 1,
-  marginBottom: 5,
+const styles = {
+  blog: {
+    backgroundColor: '#ddd',
+    '&:hover': {
+      backgroundColor: '#fff',
+    }
+  },
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, classes }) => {
   return (
-    <div style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-    </div>
+    <ListItem className={classes.blog} component={Link} to={`/blogs/${blog.id}`}>
+      <ListItemText primary={`${blog.title} ${blog.author}`} />
+    </ListItem>
   )
 }
 
-export default Blog
+export default withStyles(styles)(Blog)

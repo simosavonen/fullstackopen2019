@@ -15,9 +15,38 @@ import { initializeBlogs, likeBlog, removeBlog, commentBlog } from './reducers/b
 import { setUser } from './reducers/loginReducer'
 import { Route, Link, withRouter } from 'react-router-dom'
 
+import { withStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid';
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
+
+const styles = {
+  root: {
+    flexGrow: 1,
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  logintext: {
+    flexGrow: 1,
+    marginLeft: 20
+  },
+  logout: {
+    marginLeft: 20
+  },
+  loginbox: {
+    padding: 50,
+    width: 300,
+    height: 250,
+  }
+}
 
 const App = (props) => {
   const newBlogRef = React.createRef()
+  const { classes } = props
 
   useEffect(() => {
     blogService.getAll().then(blogs => props.initializeBlogs(blogs))
@@ -39,27 +68,37 @@ const App = (props) => {
   )
 
   const loginForm = () => (
-    <div>
-      <h2>log in to application</h2>
-      <Notification />
-      <LoginForm handleLogin={handleLogin} />
-    </div>
+    <Grid container justify="center">
+      <Paper className={classes.loginbox} elevation={2}>
+        <Typography variant="h5" component="h3">
+          log in to application
+        </Typography>
+        <Notification />
+        <LoginForm handleLogin={handleLogin} />
+      </Paper>
+    </Grid>
   )
 
 
   const blogList = () => (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      <Togglable buttonLabel='new blog' ref={newBlogRef}>
-        <NewBlog ref={newBlogRef} />
-      </Togglable>
-      <Blogs
-        user={props.user}
-        handleLike={handleLike}
-        handleRemove={handleRemove}
-      />
-    </div>
+    <>
+      <Grid container>
+        <h2>blogs</h2>
+        <Notification />
+      </Grid>
+      <Grid container>
+        <Togglable buttonLabel='new blog' ref={newBlogRef}>
+          <NewBlog ref={newBlogRef} />
+        </Togglable>
+      </Grid>
+      <Grid container>
+        <Blogs
+          user={props.user}
+          handleLike={handleLike}
+          handleRemove={handleRemove}
+        />
+      </Grid>
+    </>
   )
 
 
@@ -125,23 +164,25 @@ const App = (props) => {
     }
   }
 
-  const navLink = { padding: 5 }
-  const logoutForm = {
-    display: 'inline-block',
-    marginLeft: 10
-  }
-
   return (
-    <div>
-      <div>
-        <Link style={navLink} to='/'>blogs</Link>
-        <Link style={navLink} to='/users'>users</Link>
-        {props.user &&
-          <form style={logoutForm} onSubmit={handleLogout}>
-            {props.user.name} logged in <button type='submit'>logout</button>
-          </form>
-        }
-      </div>
+    <Grid container className={classes.root} spacing={16}>
+      <Grid item xs={12}>
+        <AppBar position="static">
+          <Toolbar>
+            <Button color="inherit" component={Link} to='/'>blogs</Button>
+            <Button color="inherit" component={Link} to='/users'>users</Button>
+            {props.user &&
+              <>
+                <Typography variant="h6" color="inherit" className={classes.logintext}>
+                  {props.user.name} logged in
+            </Typography>
+                <Button color="inherit" onClick={handleLogout} className={classes.logout}>logout</Button>
+              </>
+            }
+          </Toolbar>
+        </AppBar>
+      </Grid>
+
       <Route exact path='/' render={() => <BlogList />} />
       <Route exact path='/users' render={() => <Users />} />
       <Route path='/users/:id' render={({ match }) =>
@@ -153,7 +194,9 @@ const App = (props) => {
           handleLike={handleLike}
           handleComment={handleComment}
         />} />
-    </div>
+
+    </Grid>
+
   )
 }
 
@@ -173,4 +216,4 @@ export default withRouter(connect(
     commentBlog,
     setUser
   }
-)(App))
+)(withStyles(styles)(App)))
