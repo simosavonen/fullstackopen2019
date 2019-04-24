@@ -28,6 +28,12 @@ const BlogDetails = (props) => {
       {blog.user.id === user.id &&
         <button onClick={() => confirmRemove()}>remove</button>
       }
+      <div>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments.map(c => <li key={c.id}>{c.content}</li>)}
+        </ul>
+      </div>
     </div>
   )
 }
