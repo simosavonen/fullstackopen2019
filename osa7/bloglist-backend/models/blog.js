@@ -8,7 +8,13 @@ const blogSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'BlogUser'
-  }
+  },
+  comments: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'BlogComment'
+    }
+  ]
 })
 
 blogSchema.set('toJSON', {
