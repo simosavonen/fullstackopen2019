@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import Blogs from './components/Blogs'
+import BlogDetails from './components/BlogDetails'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
@@ -12,10 +13,7 @@ import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
 import { setUser } from './reducers/loginReducer'
-import {
-  BrowserRouter as Router,
-  Route, Link
-} from 'react-router-dom'
+import { Route, Link, withRouter } from 'react-router-dom'
 
 
 const App = (props) => {
@@ -35,6 +33,11 @@ const App = (props) => {
     }
   }, [])
 
+
+  const BlogList = () => (
+    props.user === null ? loginForm() : blogList()
+  )
+
   const loginForm = () => (
     <div>
       <h2>log in to application</h2>
@@ -51,7 +54,6 @@ const App = (props) => {
       <Togglable buttonLabel='new blog' ref={newBlogRef}>
         <NewBlog ref={newBlogRef} />
       </Togglable>
-
       <Blogs
         user={props.user}
         handleLike={handleLike}
@@ -107,7 +109,8 @@ const App = (props) => {
     try {
       window.localStorage.removeItem('loggedBlogsUser')
       props.setUser(null)
-      blogService.setToken(null) // is this needed?
+      blogService.setToken(null)
+      props.history.push('/')
     } catch (exception) {
       console.log(exception)
     }
@@ -119,28 +122,30 @@ const App = (props) => {
     marginLeft: 10
   }
 
-  const BlogList = () => (
-    props.user === null ? loginForm() : blogList()
-  )
+
 
   return (
-    <Router>
+    <div>
       <div>
-        <div>
-          <Link style={navLink} to='/'>blogs</Link>
-          <Link style={navLink} to='/users'>users</Link>
-          {props.user &&
-            <form style={logoutForm} onSubmit={handleLogout}>
-              {props.user.name} logged in <button type='submit'>logout</button>
-            </form>
-          }
-        </div>
-        <Route exact path='/' render={() => <BlogList />} />
-        <Route exact path='/users' render={() => <Users />} />
-        <Route path='/users/:id' render={({ match }) =>
-          <UserDetails id={match.params.id} />} />
+        <Link style={navLink} to='/'>blogs</Link>
+        <Link style={navLink} to='/users'>users</Link>
+        {props.user &&
+          <form style={logoutForm} onSubmit={handleLogout}>
+            {props.user.name} logged in <button type='submit'>logout</button>
+          </form>
+        }
       </div>
-    </Router>
+      <Route exact path='/' render={() => <BlogList />} />
+      <Route exact path='/users' render={() => <Users />} />
+      <Route path='/users/:id' render={({ match }) =>
+        <UserDetails id={match.params.id} />} />
+      <Route path='/blogs/:id' render={({ match }) =>
+        <BlogDetails
+          id={match.params.id}
+          handleRemove={handleRemove}
+          handleLike={handleLike}
+        />} />
+    </div>
   )
 }
 
@@ -150,7 +155,7 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   {
     initializeBlogs,
@@ -159,4 +164,4 @@ export default connect(
     removeBlog,
     setUser
   }
-)(App)
+)(App))

@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 const blogStyle = {
   padding: 10,
@@ -7,38 +8,10 @@ const blogStyle = {
   marginBottom: 5,
 }
 
-const Blog = ({ blog, user, handleLike, handleRemove }) => {
-  const [minimized, setMinimized] = useState(true)
-
-  const handleClick = (event) => {
-    event.stopPropagation() // clicking the button should not minimize the parent div
-    handleLike(blog)
-  }
-
-  const confirmRemove = (event) => {
-    event.stopPropagation()
-    const question = `remove blog ${blog.title} by ${blog.author}?`
-    if (window.confirm(question)) {
-      handleRemove(blog)
-    }
-  }
-
-  if (minimized) {
-    return (
-      <div style={blogStyle} className="minimizable" onClick={() => setMinimized(!minimized)}>
-        {blog.title} {blog.author}
-      </div>
-    )
-  }
+const Blog = ({ blog }) => {
   return (
-    <div style={blogStyle} className="minimizable" onClick={() => setMinimized(!minimized)}>
-      {blog.title} {blog.author} <br />
-      <a href={blog.url}>{blog.url}</a> <br />
-      {blog.likes} likes <button onClick={(event) => handleClick(event)}>like</button><br />
-      added by {blog.user.name}<br />
-      {blog.user.id === user.id &&
-        <button onClick={(event) => confirmRemove(event)}>remove</button>
-      }
+    <div style={blogStyle}>
+      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
     </div>
   )
 }
