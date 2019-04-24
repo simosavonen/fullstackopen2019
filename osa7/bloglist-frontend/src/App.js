@@ -41,6 +41,9 @@ const styles = {
     padding: 50,
     width: 300,
     height: 250,
+  },
+  newBlog: {
+    marginLeft: 20
   }
 }
 
@@ -83,20 +86,19 @@ const App = (props) => {
   const blogList = () => (
     <>
       <Grid container>
-        <h2>blogs</h2>
-        <Notification />
-      </Grid>
-      <Grid container>
-        <Togglable buttonLabel='new blog' ref={newBlogRef}>
-          <NewBlog ref={newBlogRef} />
-        </Togglable>
-      </Grid>
-      <Grid container>
         <Blogs
           user={props.user}
           handleLike={handleLike}
           handleRemove={handleRemove}
         />
+      </Grid>
+      <Grid container className={classes.newBlog}>
+        <Notification />
+      </Grid>
+      <Grid container className={classes.newBlog}>
+        <Togglable buttonLabel='new blog' ref={newBlogRef}>
+          <NewBlog ref={newBlogRef} />
+        </Togglable>
       </Grid>
     </>
   )
