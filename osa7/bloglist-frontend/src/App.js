@@ -11,7 +11,7 @@ import UserDetails from './components/UserDetails'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, likeBlog, removeBlog } from './reducers/blogReducer'
+import { initializeBlogs, likeBlog, removeBlog, commentBlog } from './reducers/blogReducer'
 import { setUser } from './reducers/loginReducer'
 import { Route, Link, withRouter } from 'react-router-dom'
 
@@ -116,13 +116,20 @@ const App = (props) => {
     }
   }
 
+  const handleComment = async (commentObject) => {
+    try {
+      const response = await blogService.comment(commentObject)
+      props.commentBlog(response)
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
   const navLink = { padding: 5 }
   const logoutForm = {
     display: 'inline-block',
     marginLeft: 10
   }
-
-
 
   return (
     <div>
@@ -144,6 +151,7 @@ const App = (props) => {
           id={match.params.id}
           handleRemove={handleRemove}
           handleLike={handleLike}
+          handleComment={handleComment}
         />} />
     </div>
   )
@@ -162,6 +170,7 @@ export default withRouter(connect(
     setNotification,
     likeBlog,
     removeBlog,
+    commentBlog,
     setUser
   }
 )(App))
