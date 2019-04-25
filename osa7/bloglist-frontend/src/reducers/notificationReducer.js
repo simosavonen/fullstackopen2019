@@ -1,14 +1,14 @@
 const notificationReducer = (state = '', action) => {
   switch (action.type) {
-    case 'SET_NOTIFICATION':
-      return {
-        text: action.text,
-        isError: action.isError
-      }
-    case 'CLEAR_NOTIFICATION':
-      return ''
-    default:
-      return state
+  case 'SET_NOTIFICATION':
+    return {
+      text: action.text,
+      isError: action.isError
+    }
+  case 'CLEAR_NOTIFICATION':
+    return ''
+  default:
+    return state
   }
 }
 

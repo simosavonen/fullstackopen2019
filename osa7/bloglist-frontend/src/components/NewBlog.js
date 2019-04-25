@@ -53,7 +53,7 @@ const NewBlog = React.forwardRef((props, ref) => {
     <Paper className={classes.paper} elevation={2}>
       <Typography variant="h5" component="h3">
         create new blog
-       </Typography>
+      </Typography>
       <form onSubmit={addBlog}>
         <TextField
           type='text'

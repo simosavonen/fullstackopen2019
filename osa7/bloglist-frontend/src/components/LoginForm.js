@@ -1,7 +1,7 @@
 import React from 'react'
 import { useField } from '../hooks'
 import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button'
 
 const Login = ({ handleLogin }) => {
   const username = useField('text')

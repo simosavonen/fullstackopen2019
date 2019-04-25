@@ -1,32 +1,32 @@
 const blogReducer = (state = [], action) => {
   switch (action.type) {
-    case 'NEW_BLOG':
-      return [...state, action.data]
-    case 'INIT_BLOGS':
-      return action.data
-    case 'REMOVE_BLOG':
-      return state.filter(blog => blog.id !== action.data.id)
-    case 'LIKE_BLOG':
-      const blogToChange = state.find(b => b.id === action.data.id)
-      const likedBlog = {
-        ...blogToChange,
-        likes: blogToChange.likes + 1
-      }
-      return state.map(blog => blog.id !== action.data.id ? blog : likedBlog)
-    case 'COMMENT_BLOG':
-      const commentRecipient = state.find(b => b.id === action.data.blog)
-      // get rid of the field 'blog'
-      const stripped = {
-        content: action.data.content,
-        id: action.data.id
-      }
-      const commentedBlog = {
-        ...commentRecipient,
-        comments: commentRecipient.comments.concat(stripped)
-      }
-      return state.map(blog => blog.id !== action.data.blog ? blog : commentedBlog)
-    default:
-      return state
+  case 'NEW_BLOG':
+    return [...state, action.data]
+  case 'INIT_BLOGS':
+    return action.data
+  case 'REMOVE_BLOG':
+    return state.filter(blog => blog.id !== action.data.id)
+  case 'LIKE_BLOG':
+    const blogToChange = state.find(b => b.id === action.data.id)
+    const likedBlog = {
+      ...blogToChange,
+      likes: blogToChange.likes + 1
+    }
+    return state.map(blog => blog.id !== action.data.id ? blog : likedBlog)
+  case 'COMMENT_BLOG':
+    const commentRecipient = state.find(b => b.id === action.data.blog)
+    // get rid of the field 'blog'
+    const stripped = {
+      content: action.data.content,
+      id: action.data.id
+    }
+    const commentedBlog = {
+      ...commentRecipient,
+      comments: commentRecipient.comments.concat(stripped)
+    }
+    return state.map(blog => blog.id !== action.data.blog ? blog : commentedBlog)
+  default:
+    return state
   }
 }
 

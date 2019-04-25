@@ -16,7 +16,7 @@ import { setUser } from './reducers/loginReducer'
 import { Route, Link, withRouter } from 'react-router-dom'
 
 import { withStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -177,7 +177,7 @@ const App = (props) => {
               <>
                 <Typography variant="h6" color="inherit" className={classes.logintext}>
                   {props.user.name} logged in
-            </Typography>
+                </Typography>
                 <Button color="inherit" onClick={handleLogout} className={classes.logout}>logout</Button>
               </>
             }
