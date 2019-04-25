@@ -12,7 +12,8 @@ const styles = {
     margin: 20,
   },
   subheader: {
-    backgroundColor: '#ccc'
+    backgroundColor: '#a9a9a9',
+    fontSize: '15pt'
   }
 }
 

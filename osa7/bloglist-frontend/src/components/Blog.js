@@ -6,9 +6,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = {
   blog: {
-    backgroundColor: '#ddd',
+    backgroundColor: '#c0c0c0',
     '&:hover': {
-      backgroundColor: '#fff',
+      backgroundColor: '#dcdcdc',
     }
   },
 }
