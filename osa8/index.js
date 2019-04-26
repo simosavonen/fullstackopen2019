@@ -1,5 +1,24 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
 const { ApolloServer, gql } = require('apollo-server')
+const mongoose = require('mongoose')
 const uuid = require('uuid/v1')
+const Book = require('./models/book')
+const Author = require('./models/author')
+
+mongoose.set('useFindAndModify', false)
+mongoose.set('useCreateIndex', true);
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true })
+  .then(() => {
+    console.log('connected to MongoDB')
+  })
+  .catch((error) => {
+    console.log('error connection to MongoDB:', error.message)
+  })
 
 let authors = [
   {
@@ -26,11 +45,6 @@ let authors = [
     id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
   },
 ]
-
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
-*/
 
 let books = [
   {
@@ -94,16 +108,16 @@ const typeDefs = gql`
 
   type Book {
     title: String!
-    published: Int!
-    author: String!
+    published: Int!    
     id: ID!
+    author: Author! 
     genres: [String]!
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
+    allBooks: [Book!]!
     allAuthors:[Author!]!
   }
 
@@ -111,67 +125,56 @@ const typeDefs = gql`
     addBook(
       title: String!
       published: Int!
-      author: String!
+      author: String!            
       genres: [String]!
     ): Book
     editAuthor(
       name: String!
-      setBornTo: Int!
+      born: Int!
     ): Author
   }
 `
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      // naiivi ratkaisu
-      if (args.author && args.genre) {
-        const booksByAuthor = books.filter(b => b.author === args.author)
-        return booksByAuthor.filter(b => b.genres.includes(args.genre))
-      }
-      if (args.author) {
-        return books.filter(b => b.author === args.author)
-      }
-      if (args.genre) {
-        return books.filter(b => b.genres.includes(args.genre))
-      }
-      return books
-    },
-    allAuthors: () => authors,
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
+    allBooks: () => Book.find({}),
+    allAuthors: () => Author.find({}),
   },
   Author: {
-    bookCount: (root) => books.filter(b => b.author === root.name).length
+    bookCount: (root) => Book.find({ author: root.id }).countDocuments()
+  },
+  Book: {
+    author: (root) => Author.findOne({ _id: root.author }) // miksi _id, eikä id?
   },
   Mutation: {
-    addBook: (root, args) => {
-      if (books.find(b => b.title === args.title)) {
-        throw new UserInputError('Title must be unique', {
-          invalidArgs: args.title,
-        })
+    addBook: async (root, args) => {
+      let author = await Author.findOne({ name: args.author })
+      if (!author) {
+        author = new Author({ name: args.author, born: null })
+        author = await author.save()
       }
-      if (!authors.find(a => a.name === args.author)) {
-        const author = { name: args.author, born: null, id: uuid() }
-        authors = authors.concat(author)
-      }
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
+      const book = new Book({
+        title: args.title,
+        published: args.published,
+        genres: args.genres,
+        author: author.id
+      })
+      await book.save()
       return book
     },
-    editAuthor: (root, args) => {
-      const author = authors.find(a => a.name === args.name)
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
       if (!author) {
         return null
       }
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-      return updatedAuthor
+      author.born = args.born
+      await author.save()
+      return author
     }
   }
-
 }
-
 
 const server = new ApolloServer({
   typeDefs,

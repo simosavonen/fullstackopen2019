@@ -5,13 +5,14 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 
-
 const ALL_BOOKS = gql`
 {
   allBooks {
     title
-    author
     published
+    author {
+      name
+    }
     id
   }
 }
@@ -37,7 +38,6 @@ mutation createBook($title: String!, $author: String!, $published: Int!, $genres
     genres: $genres
   ) {
     title
-    author
     published
     genres
     id
@@ -47,7 +47,7 @@ mutation createBook($title: String!, $author: String!, $published: Int!, $genres
 
 const EDIT_AUTHOR = gql`
 mutation editAuthor($name: String!, $born: Int!) {
-  editAuthor(name: $name, setBornTo: $born) {
+  editAuthor(name: $name, born: $born) {
     name
     born
     id
