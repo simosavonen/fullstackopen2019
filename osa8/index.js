@@ -1,9 +1,8 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, UserInputError, AuthenticationError, gql } = require('apollo-server')
 const mongoose = require('mongoose')
-const uuid = require('uuid/v1')
 const Book = require('./models/book')
 const Author = require('./models/author')
 const jwt = require('jsonwebtoken')
