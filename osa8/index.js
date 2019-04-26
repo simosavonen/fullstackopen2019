@@ -5,6 +5,7 @@ const { ApolloServer, UserInputError, AuthenticationError, gql } = require('apol
 const mongoose = require('mongoose')
 const Book = require('./models/book')
 const Author = require('./models/author')
+const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 
 const JWT_SECRET = 'NEED_HERE_A_SECRET_KEY'
