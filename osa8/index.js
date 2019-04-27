@@ -30,7 +30,7 @@ const typeDefs = gql`
     name: String!
     id: ID!
     born: Int
-    bookCount: Int
+    authorOf: [Book!]!
   }
 
   type Book {
@@ -96,13 +96,18 @@ const resolvers = {
       }
       return Book.find({ "genres": args.genre })
     },
-    allAuthors: () => Author.find({}),
+    allAuthors: () => Author.find({}).populate('authorOf'),
     me: (root, args, context) => {
       return context.currentUser
     },
   },
   Author: {
-    bookCount: (root) => Book.find({ author: root.id }).countDocuments()
+    authorOf: async (root) => {
+      const books = await Book.find({
+        author: { $in: [root._id] }  // toimii, mutten tiedä miksi
+      })
+      return books
+    }
   },
   Book: {
     author: (root) => Author.findOne({ _id: root.author }) // miksi _id, eikä id?

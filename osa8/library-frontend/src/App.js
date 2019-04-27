@@ -26,8 +26,10 @@ const ALL_AUTHORS = gql`
   allAuthors {
     name
     born
-    bookCount
     id
+    authorOf {
+      title
+    }
   }
 }
 `
@@ -93,7 +95,6 @@ subscription {
   authorAdded {
     name
     born
-    bookCount
     id    
   }
 }
