@@ -15,6 +15,7 @@ const ALL_BOOKS = gql`
       name
     }
     id
+    genres
   }
 }
 `
@@ -65,7 +66,7 @@ const LOGIN = gql`
 `
 
 const App = () => {
-  const [page, setPage] = useState('authors')
+  const [page, setPage] = useState('books')
   const [token, setToken] = useState(null)
 
   const client = useApolloClient()
@@ -125,6 +126,7 @@ const App = () => {
       <Books
         show={page === 'books'}
         result={allBooks}
+        client={client}
       />
 
       <NewBook
