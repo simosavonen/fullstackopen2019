@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation, useApolloClient } from 'react-apollo-hooks'
 import { gql } from 'apollo-boost'
+import { Subscription } from 'react-apollo'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
@@ -70,6 +71,20 @@ const ME = gql`
   me {
     username
     favoriteGenre
+  }
+}
+`
+
+const BOOK_ADDED = gql`
+subscription {
+  bookAdded {
+    title
+    published
+    author {
+      name
+    }
+    id
+    genres
   }
 }
 `
@@ -162,6 +177,15 @@ const App = () => {
         setToken={(token) => setToken(token)}
         handleError={handleError}
       />
+
+      <Subscription
+        subscription={BOOK_ADDED}
+        onSubscriptionData={({ subscriptionData }) => {
+          window.alert(JSON.stringify(subscriptionData.data.bookAdded))
+        }}
+      >
+        {() => null}
+      </Subscription>
 
     </div>
   )
