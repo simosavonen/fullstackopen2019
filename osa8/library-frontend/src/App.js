@@ -65,9 +65,19 @@ const LOGIN = gql`
   }
 `
 
+const ME = gql`
+{
+  me {
+    username
+    favoriteGenre
+  }
+}
+`
+
 const App = () => {
   const [page, setPage] = useState('books')
   const [token, setToken] = useState(null)
+  const [favorite, setFavorite] = useState('')
 
   const client = useApolloClient()
 
@@ -98,15 +108,26 @@ const App = () => {
     localStorage.clear()
     client.resetStore()
     setPage('login')
+    setFavorite(null)
+  }
+
+  const showRecommendations = async () => {
+    const currentUser = await client.query({ query: ME })
+    setFavorite(currentUser.data.me.favoriteGenre)
+    setPage('books')
   }
 
   return (
     <div>
       <div>
         <button onClick={() => setPage('authors')}>authors</button>
-        <button onClick={() => setPage('books')}>books</button>
+        <button onClick={() => {
+          setFavorite(null)
+          setPage('books')
+        }}>books</button>
         {token &&
           <>
+            <button onClick={() => showRecommendations()}>recommendations</button>
             <button onClick={() => setPage('add')}>add book</button>
             <button onClick={() => logout()}>logout</button>
           </>
@@ -127,6 +148,7 @@ const App = () => {
         show={page === 'books'}
         result={allBooks}
         client={client}
+        favorite={favorite}
       />
 
       <NewBook
