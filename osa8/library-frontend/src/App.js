@@ -88,6 +88,16 @@ subscription {
   }
 }
 `
+const AUTHOR_ADDED = gql`
+subscription {
+  authorAdded {
+    name
+    born
+    bookCount
+    id    
+  }
+}
+`
 
 const App = () => {
   const [page, setPage] = useState('books')
@@ -107,9 +117,24 @@ const App = () => {
     console.log(error)
   }
 
+  const includedIn = (set, object) =>
+    set.map(p => p.id).includes(object.id)
+
   const addBook = useMutation(CREATE_BOOK, {
     onError: handleError,
-    refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }]
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: ALL_BOOKS })
+      const addedBook = response.data.addBook
+
+      if (!includedIn(dataInStore.allBooks, addedBook)) {
+        dataInStore.allBooks.push(addedBook)
+        client.writeQuery({
+          query: ALL_BOOKS,
+          data: dataInStore
+        })
+      }
+    },
+    refetchQueries: [{ query: ALL_AUTHORS }]
   })
 
   const editAuthor = useMutation(EDIT_AUTHOR, {
@@ -181,7 +206,36 @@ const App = () => {
       <Subscription
         subscription={BOOK_ADDED}
         onSubscriptionData={({ subscriptionData }) => {
-          window.alert(JSON.stringify(subscriptionData.data.bookAdded))
+          const addedBook = subscriptionData.data.bookAdded
+          window.alert(`${addedBook.title} added`)
+
+          const dataInStore = client.readQuery({ query: ALL_BOOKS })
+          if (!includedIn(dataInStore.allBooks, addedBook)) {
+            dataInStore.allBooks.push(addedBook)
+            client.writeQuery({
+              query: ALL_BOOKS,
+              data: dataInStore
+            })
+          }
+        }}
+      >
+        {() => null}
+      </Subscription>
+
+      <Subscription
+        subscription={AUTHOR_ADDED}
+        onSubscriptionData={({ subscriptionData }) => {
+          const addedAuthor = subscriptionData.data.authorAdded
+          window.alert(`${addedAuthor.name} added`)
+
+          const dataInStore = client.readQuery({ query: ALL_AUTHORS })
+          if (!includedIn(dataInStore.allAuthors, addedAuthor)) {
+            dataInStore.allAuthors.push(addedAuthor)
+            client.writeQuery({
+              query: ALL_AUTHORS,
+              data: dataInStore
+            })
+          }
         }}
       >
         {() => null}

@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    ".git",
+    "library-frontend/*",
+    "node_modules/**/node_modules"
+  ]
+}
