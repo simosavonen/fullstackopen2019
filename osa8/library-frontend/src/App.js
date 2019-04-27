@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery, useMutation, useApolloClient } from 'react-apollo-hooks'
 import { gql } from 'apollo-boost'
 import Authors from './components/Authors'
@@ -69,6 +69,10 @@ const App = () => {
   const [token, setToken] = useState(null)
 
   const client = useApolloClient()
+
+  useEffect(() => {
+    setToken(localStorage.getItem('library-user-token', token))
+  }, [])
 
   const allBooks = useQuery(ALL_BOOKS)
   const allAuthors = useQuery(ALL_AUTHORS)

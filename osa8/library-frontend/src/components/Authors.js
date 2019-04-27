@@ -23,6 +23,10 @@ const Authors = (props) => {
 
   const authors = props.result.data.allAuthors
 
+  if (!authors) {
+    return null
+  }
+
   return (
     <div>
       <h2>authors</h2>

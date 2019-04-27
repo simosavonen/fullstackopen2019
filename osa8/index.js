@@ -130,7 +130,7 @@ const typeDefs = gql`
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks: [Book!]!
+    allBooks(genre: String): [Book!]!
     allAuthors:[Author!]!
     me: User
   }
@@ -161,7 +161,12 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allBooks: () => Book.find({}),
+    allBooks: (root, args) => {
+      if (!args.genre) {
+        return Book.find({})
+      }
+      return Book.find({ "genres": args.genre })
+    },
     allAuthors: () => Author.find({}),
     me: (root, args, context) => {
       return context.currentUser
@@ -251,7 +256,8 @@ const server = new ApolloServer({
   resolvers,
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
-    if (auth && auth.toLowerCase().startsWith('brearer ')) {
+
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
       const decodedToken = jwt.verify(
         auth.substring(7), JWT_SECRET
       )
