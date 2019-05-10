@@ -1,2 +1,5 @@
 # fullstackopen2019
-Palautuksiani Helsingin Avoimen YO:n kurssille Fullstack-websovelluskehitys
+
+Submissions for a Full Stack course at University of Helsinki.
+
+The course is now over, archiving this. Examples that link to live websites do not work anymore.

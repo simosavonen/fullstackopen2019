@@ -1,0 +1,1 @@
+DELETE https://banana-shortcake-38876.herokuapp.com/api/persons/3

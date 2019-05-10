@@ -43,6 +43,11 @@ const App = () => {
           setIsError(false)
           setTimeout(() => { setMessage(null) }, 5000)
         })
+        .catch(error => {
+          setMessage(`Numeron lisäys epäonnistui: ${error.response.data.error}`)
+          setIsError(true)
+          setTimeout(() => { setMessage(null) }, 5000)
+        })
     }
     else {
       const message = `${newName} on jo luettelossa, korvataanko vanha numero uudella?`
@@ -61,7 +66,7 @@ const App = () => {
             setTimeout(() => { setMessage(null) }, 5000)
 
             // ehkä pitäisi hakea palvelimelta uusi päivitetty tilanne
-            // setPersons(persons.filter(p => p.id !== id))
+            setPersons(persons.filter(p => p.id !== id))
           })
       }
     }
@@ -85,7 +90,7 @@ const App = () => {
           setTimeout(() => { setMessage(null) }, 5000)
 
           // ehkä pitäisi hakea palvelimelta uusi päivitetty tilanne
-          // setPersons(personDeleted)
+          setPersons(personDeleted)
         })
     }
   }

@@ -1,0 +1,7 @@
+POST https://banana-shortcake-38876.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "Uusi Henkilö",
+    "number": "0400-224331"
+}
